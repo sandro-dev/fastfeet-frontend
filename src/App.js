@@ -1,7 +1,13 @@
 import React from 'react';
 
+import logo from '~/assets/logo.png';
+
 function App() {
-  return <h1>FastFeet FrontEnd</h1>;
+  return (
+    <>
+      <img src={logo} alt="logo" />
+    </>
+  );
 }
 
 export default App;

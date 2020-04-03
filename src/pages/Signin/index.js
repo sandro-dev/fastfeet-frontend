@@ -1,14 +1,19 @@
 import React from 'react';
+import { Form, Input } from '@rocketseat/unform';
 
 import logo from '~/assets/logo.png';
 
 export default function Signin() {
+  function handleSubmit(data) {
+    console.log('data: ', data);
+  }
+
   return (
     <>
-      <form>
+      <Form onSubmit={handleSubmit}>
         <img src={logo} alt="logo" />
         <label htmlFor="email">SEU E-MAIL:</label>
-        <input
+        <Input
           id="email"
           type="email"
           name="email"
@@ -16,15 +21,15 @@ export default function Signin() {
         />
 
         <label htmlFor="password">SUA SENHA:</label>
-        <input
+        <Input
           id="password"
           type="password"
           name="password"
           placeholder="******"
         />
 
-        <input type="submit" value="Entrar no sistema" />
-      </form>
+        <button type="submit">Entrar no sistema</button>
+      </Form>
     </>
   );
 }

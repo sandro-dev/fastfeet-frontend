@@ -24,7 +24,7 @@ export const Content = styled.div`
     flex-direction: column;
 
     img {
-      margin: 20px 0 30px;
+      margin: 20px auto 30px;
       width: 85%;
     }
 
@@ -41,16 +41,19 @@ export const Content = styled.div`
       border: 1px solid #ddd;
       border-radius: 4px;
       color: #999;
+      ::placeholder {
+        color: #999;
+      }
     }
 
-    input[type='submit'] {
+    button {
       height: 44px;
       background: #7d40e7;
       color: #fff;
       font-weight: bold;
       border-radius: 4px;
       padding: 0 15px;
-      margin: 5px 0;
+      margin: 5px 0 30px;
     }
   }
 `;

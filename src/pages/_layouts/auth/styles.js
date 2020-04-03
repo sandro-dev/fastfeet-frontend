@@ -33,6 +33,13 @@ export const Content = styled.div`
       font-weight: bold;
     }
 
+    span {
+      color: #e17055;
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-style: italic;
+    }
+
     input {
       height: 44px;
       align-self: stretch;

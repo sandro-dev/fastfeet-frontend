@@ -47,7 +47,7 @@ export const Content = styled.div`
       margin: 10px 0 10px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      color: #999;
+      color: #333;
       ::placeholder {
         color: #999;
       }

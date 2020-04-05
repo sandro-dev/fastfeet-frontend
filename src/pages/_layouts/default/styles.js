@@ -1,6 +1,17 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  height: 100%;
-  background: #7d40e7;
+  min-height: 100%;
+  background: #f5f5f5;
+`;
+export const Content = styled.main`
+  margin: 30px auto 30px 120px;
+
+  h1 {
+    color: #444;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
 `;

@@ -3,11 +3,11 @@ import { MdSearch } from 'react-icons/md';
 
 import { Container, Input } from './styles';
 
-export default function SearchInput() {
+export default function SearchInput({ ...rest }) {
   return (
     <Container>
-      <MdSearch color="#999" size={18} />
-      <Input name="search" placeholder="Buscar por encomendas" />
+      <MdSearch color="#999" size={16} />
+      <Input {...rest} />
     </Container>
   );
 }

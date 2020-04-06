@@ -18,6 +18,7 @@ export const Container = styled.div`
 export const Input = styled.input`
   padding: 5px;
   background-color: transparent !important;
+  color: #444;
 
   ::placeholder {
     color: #999;

@@ -3,11 +3,13 @@ import styled from 'styled-components';
 export const Container = styled.div`
   width: 1100px;
   margin-top: 30px;
+  padding-bottom: 10px !important;
 
   header,
   section {
     display: grid;
-    grid-template-columns: 0.5fr repeat(${(props) => props.size - 1}, 1fr);
+    grid-template-columns: ${(props) =>
+      props.template ? props.template : `0.5fr repeat(${props.size - 1}, 1fr)`};
     background: #f5f5f5;
     height: 57px;
     text-align: left;

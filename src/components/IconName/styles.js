@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
-
 export const Icon = styled.div`
   background-color: ${(props) => props.bgcolor};
   color: ${(props) => props.color};
@@ -14,4 +12,5 @@ export const Icon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 10px;
 `;

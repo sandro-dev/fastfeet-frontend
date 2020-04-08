@@ -6,6 +6,7 @@ import Grid from '~/components/Grid';
 import Badge from '~/components/Badge';
 import IconName from '~/components/IconName';
 import Pagination from '~/components/Pagination';
+import MoreMenu from '~/components/MoreMenu';
 
 import api from '~/services/api';
 
@@ -13,7 +14,6 @@ export default function Deliveries() {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [totalpages, setTotalpages] = useState();
-  const [totalresults, setTotalresults] = useState();
   const perPage = 10;
 
   const [loading, setLoading] = useState(true);
@@ -33,12 +33,34 @@ export default function Deliveries() {
         delivery.recipient.city,
         delivery.recipient.state,
         <Badge status="Retirada" color="#4D85EE" bgcolor="#BAD2FF" />,
-        '...',
+        <MoreMenu
+          id={delivery.id}
+          dataItem={delivery}
+          menuItems={[
+            {
+              icon: 'MdRemoveRedEye',
+              iconColor: '#8E5BE8',
+              text: 'Visualizar',
+              // url: 'deliveries/view',
+            },
+            {
+              icon: 'MdEdit',
+              iconColor: '#4D85EE',
+              text: 'Editar',
+              url: `/deliveries/edit/${delivery.id}`,
+            },
+            {
+              icon: 'MdDeleteForever',
+              iconColor: '#DE3B3B',
+              text: 'Excluir',
+              // url: `delete/${delivery.id}`,
+            },
+          ]}
+        />,
       ]);
 
       setItems(data);
       setTotalpages(response.data.total_page);
-      setTotalresults(response.data.total_results);
       setLoading(false);
     }
 
@@ -64,7 +86,7 @@ export default function Deliveries() {
           'Ações',
         ]}
         itemsArray={items}
-        template="0.5fr 1.5fr 2.5fr 1fr 1fr 1fr 1fr"
+        template="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr"
       />
 
       <Pagination

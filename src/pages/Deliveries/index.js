@@ -1,21 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
+import api from '~/services/api';
 
 import SearchInput from '~/components/Input/SearchInput';
 import Grid from '~/components/Grid';
-import Badge from '~/components/Badge';
-import IconName from '~/components/IconName';
-import Pagination from '~/components/Pagination';
+import Avatar from '~/components/Avatar';
+import Status from '~/components/Status';
 import MoreMenu from '~/components/MoreMenu';
-
-import api from '~/services/api';
+import Pagination from '~/components/Pagination';
 
 export default function Deliveries() {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [totalpages, setTotalpages] = useState();
-  const perPage = 10;
-
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState('');
   const delayedQuery = useRef(debounce((e) => setProduct(e), 500)).current;
@@ -23,16 +20,25 @@ export default function Deliveries() {
   useEffect(() => {
     async function loadDeliveries() {
       const response = await api.get(`deliveries`, {
-        params: { page, perPage, q: product },
+        params: { page, q: product },
       });
 
       const data = response.data.results.map((delivery) => [
         `#${delivery.id}`,
         delivery.recipient.name,
-        <IconName fullname={delivery.deliveryman.name} />,
+        delivery.deliveryman.avatar_id ? (
+          <Avatar
+            fullname={delivery.deliveryman.name}
+            url={delivery.deliveryman.avatar.url}
+            isPhoto
+          />
+        ) : (
+          <Avatar fullname={delivery.deliveryman.name} />
+        ),
         delivery.recipient.city,
         delivery.recipient.state,
-        <Badge status="Retirada" color="#4D85EE" bgcolor="#BAD2FF" />,
+        // <Badge status="Retirada" color="#4D85EE" bgcolor="#BAD2FF" />,
+        <Status status={delivery.status} />,
         <MoreMenu
           id={delivery.id}
           dataItem={delivery}
@@ -41,7 +47,6 @@ export default function Deliveries() {
               icon: 'MdRemoveRedEye',
               iconColor: '#8E5BE8',
               text: 'Visualizar',
-              // url: 'deliveries/view',
             },
             {
               icon: 'MdEdit',
@@ -53,7 +58,6 @@ export default function Deliveries() {
               icon: 'MdDeleteForever',
               iconColor: '#DE3B3B',
               text: 'Excluir',
-              // url: `delete/${delivery.id}`,
             },
           ]}
         />,

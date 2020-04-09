@@ -4,15 +4,19 @@ import { sample } from 'lodash';
 
 import { Image, Icon } from './styles';
 
-export default function Avatar({ fullname, photo, url, onlyIcon }) {
+export default function Avatar({ fullname, isPhoto, url, onlyIcon }) {
   const name = fullname.split(' ');
   const fname = name.shift();
   const lname = name.pop();
 
-  if (photo) {
+  if (isPhoto) {
     return (
       <>
-        <Image src={url} alt="" />
+        <Image
+          src={url}
+          alt={`${fname} ${lname}`}
+          title={`${fname} ${lname}`}
+        />
         {`${fname} ${lname}`}
       </>
     );
@@ -30,9 +34,6 @@ export default function Avatar({ fullname, photo, url, onlyIcon }) {
   const select = sample(pallete);
   const initials = fname.split('').shift() + lname.split('').shift();
 
-  console.log('pallete --> ', select);
-  console.log('initials --> ', initials);
-
   return (
     <>
       <Icon bgcolor={select.bgcolor} color={select.color}>
@@ -46,12 +47,12 @@ export default function Avatar({ fullname, photo, url, onlyIcon }) {
 Avatar.propTypes = {
   fullname: PropTypes.string.isRequired,
   onlyIcon: PropTypes.bool,
-  photo: PropTypes.bool,
+  isPhoto: PropTypes.bool,
   url: PropTypes.string,
 };
 
 Avatar.defaultProps = {
   onlyIcon: false,
-  photo: false,
+  isPhoto: false,
   url: '',
 };

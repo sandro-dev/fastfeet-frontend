@@ -2,9 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { sample } from 'lodash';
 
-import { Icon } from './styles';
+import { Image, Icon } from './styles';
 
-export default function IconName({ fullname, onlyIcon }) {
+export default function Avatar({ fullname, photo, url, onlyIcon }) {
+  const name = fullname.split(' ');
+  const fname = name.shift();
+  const lname = name.pop();
+
+  if (photo) {
+    return (
+      <>
+        <Image src={url} alt="" />
+        {`${fname} ${lname}`}
+      </>
+    );
+  }
+
   const pallete = [
     { bgcolor: '#F4EFFC', color: '#A28FD0' },
     { bgcolor: '#FCF4EE', color: '#CB946C' },
@@ -15,11 +28,10 @@ export default function IconName({ fullname, onlyIcon }) {
   ];
 
   const select = sample(pallete);
-
-  const name = fullname.split(' ');
-  const fname = name.shift();
-  const lname = name.pop();
   const initials = fname.split('').shift() + lname.split('').shift();
+
+  console.log('pallete --> ', select);
+  console.log('initials --> ', initials);
 
   return (
     <>
@@ -31,11 +43,15 @@ export default function IconName({ fullname, onlyIcon }) {
   );
 }
 
-IconName.propTypes = {
+Avatar.propTypes = {
   fullname: PropTypes.string.isRequired,
   onlyIcon: PropTypes.bool,
+  photo: PropTypes.bool,
+  url: PropTypes.string,
 };
 
-IconName.defaultProps = {
+Avatar.defaultProps = {
   onlyIcon: false,
+  photo: false,
+  url: '',
 };

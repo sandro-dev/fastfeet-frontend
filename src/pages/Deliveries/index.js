@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
 import api from '~/services/api';
+// import history from '~/services/history';
 
 import SearchInput from '~/components/Input/SearchInput';
 import Grid from '~/components/Grid';
@@ -10,12 +11,12 @@ import MoreMenu from '~/components/MoreMenu';
 import Pagination from '~/components/Pagination';
 
 export default function Deliveries() {
-  const [items, setItems] = useState([]);
+  const [deliveryItems, setDeliveryItems] = useState([]);
   const [page, setPage] = useState(1);
   const [totalpages, setTotalpages] = useState();
-  const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState('');
   const delayedQuery = useRef(debounce((e) => setProduct(e), 500)).current;
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadDeliveries() {
@@ -37,37 +38,21 @@ export default function Deliveries() {
         ),
         delivery.recipient.city,
         delivery.recipient.state,
-        // <Badge status="Retirada" color="#4D85EE" bgcolor="#BAD2FF" />,
         <Status status={delivery.status} />,
         <MoreMenu
           id={delivery.id}
-          dataItem={delivery}
-          menuItems={[
-            {
-              icon: 'MdRemoveRedEye',
-              iconColor: '#8E5BE8',
-              text: 'Visualizar',
-            },
-            {
-              icon: 'MdEdit',
-              iconColor: '#4D85EE',
-              text: 'Editar',
-              url: `/deliveries/edit/${delivery.id}`,
-            },
-            {
-              icon: 'MdDeleteForever',
-              iconColor: '#DE3B3B',
-              text: 'Excluir',
-            },
+          items={[
+            { type: 'view', url: `/showmodal` },
+            { type: 'edit', url: `/deliveries/edit` },
+            { type: 'delete', url: `/deliveries/` },
           ]}
         />,
       ]);
 
-      setItems(data);
+      setDeliveryItems(data);
       setTotalpages(response.data.total_page);
-      setLoading(false);
+      // setLoading(false);
     }
-
     loadDeliveries();
   }, [page, totalpages, product]);
 
@@ -89,7 +74,7 @@ export default function Deliveries() {
           'Status',
           'Ações',
         ]}
-        itemsArray={items}
+        itemsArray={deliveryItems}
         template="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr"
       />
 

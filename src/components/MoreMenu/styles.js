@@ -11,6 +11,11 @@ export const Button = styled.button`
   position: relative;
 `;
 
+export const ButtonItem = styled.button`
+  background: none;
+  border: 0;
+`;
+
 export const List = styled.ul`
   position: absolute;
   width: 150px;

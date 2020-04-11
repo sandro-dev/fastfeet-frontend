@@ -6,7 +6,6 @@ export default function EditDelivery(delivery) {
   return (
     <>
       <h1>Edit Delivery {id}</h1>
-      <h2>{delivery.recipient.name}</h2>
     </>
   );
 }

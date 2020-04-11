@@ -10,6 +10,8 @@ import Status from '~/components/Status';
 import MoreMenu from '~/components/MoreMenu';
 import Pagination from '~/components/Pagination';
 
+import DeliveryModal from './DeliveryModal';
+
 export default function Deliveries() {
   const [deliveryItems, setDeliveryItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -42,9 +44,9 @@ export default function Deliveries() {
         <MoreMenu
           id={delivery.id}
           items={[
-            { type: 'view', url: `/showmodal` },
+            { type: 'view', content: <DeliveryModal data={delivery} /> },
             { type: 'edit', url: `/deliveries/edit` },
-            { type: 'delete', url: `/deliveries/` },
+            { type: 'delete', url: `/deliveries` },
           ]}
         />,
       ]);

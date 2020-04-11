@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
 import api from '~/services/api';
-// import history from '~/services/history';
 
 import SearchInput from '~/components/Input/SearchInput';
+import Button from '~/components/Button';
+import HeaderContent from '~/components/HeaderContent';
 import Grid from '~/components/Grid';
 import Avatar from '~/components/Avatar';
 import Status from '~/components/Status';
@@ -60,12 +61,21 @@ export default function Deliveries() {
 
   return (
     <>
-      <h1>Gerenciando encomendas</h1>
-      <SearchInput
-        name="search"
-        placeholder="Buscar por encomendas"
-        onChange={(e) => delayedQuery(e.target.value)}
-      />
+      <HeaderContent>
+        <div>
+          <h1>Gerenciando encomendas</h1>
+          <SearchInput
+            name="search"
+            placeholder="Buscar por encomendas"
+            onChange={(e) => delayedQuery(e.target.value)}
+          />
+        </div>
+        <aside>
+          <Button type="back" />
+          <Button type="add" url="deliveries/insert" />
+        </aside>
+      </HeaderContent>
+
       <Grid
         titles={[
           'ID',

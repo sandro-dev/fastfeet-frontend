@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup';
 
 import PropTypes from 'prop-types';
 
-export default function Modal({ children }) {
+export default function Modal({ content }) {
   return (
     <Popup
       trigger={
@@ -21,15 +21,15 @@ export default function Modal({ children }) {
         padding: '25px',
       }}
       overlayStyle={{
-        background: 'rgb(0, 0, 0, 0.6)',
+        background: 'rgb(0, 0, 0, 0.7)',
         border: 'rgb(0, 0, 0, 0.85)',
       }}
     >
-      {children}
+      {content}
     </Popup>
   );
 }
 
 Modal.propTypes = {
-  children: PropTypes.element.isRequired,
+  content: PropTypes.element.isRequired,
 };

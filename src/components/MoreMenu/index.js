@@ -3,13 +3,9 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import { debounce } from 'lodash';
-import {
-  MdMoreHoriz,
-  MdRemoveRedEye,
-  MdEdit,
-  MdDeleteForever,
-} from 'react-icons/md';
+import { MdMoreHoriz, MdEdit, MdDeleteForever } from 'react-icons/md';
 
+import Modal from '~/components/Modal';
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -27,9 +23,10 @@ export default function MoreMenu({ id, items }) {
     const confirm = window.confirm(`Tem certeza que quer deletar este item?`);
 
     if (confirm) {
-      const response = await api.delete(`/deliveries/${itemId}`);
+      const response = await api.delete(`${url}/${itemId}`);
       if (response.data.ok === true) {
         toast.success(`item deletado com sucesso`);
+        setTimeout(() => window.location.reload(false), 1000);
       } else {
         toast.error('Erro ao tentar deletar item');
       }
@@ -49,12 +46,7 @@ export default function MoreMenu({ id, items }) {
               <ItemList
                 key={`${id}${Math.random().toString(36).substring(1, 5)}`}
               >
-                {item.type === 'view' ? (
-                  <ButtonItem onClick={() => {}}>
-                    <MdRemoveRedEye size={20} color="#8e5be8" />
-                    Visualizar
-                  </ButtonItem>
-                ) : null}
+                {item.type === 'view' ? <Modal content={item.content} /> : null}
 
                 {item.type === 'edit' ? (
                   <ButtonItem

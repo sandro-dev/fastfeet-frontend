@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
+// import ReactLoading from 'react-loading';
 import api from '~/services/api';
 
 import SearchInput from '~/components/Input/SearchInput';
@@ -10,6 +11,7 @@ import Avatar from '~/components/Avatar';
 import Status from '~/components/Status';
 import MoreMenu from '~/components/MoreMenu';
 import Pagination from '~/components/Pagination';
+import Loading from '~/components/Loading';
 
 import DeliveryModal from './DeliveryModal';
 
@@ -19,7 +21,7 @@ export default function Deliveries() {
   const [totalpages, setTotalpages] = useState();
   const [product, setProduct] = useState('');
   const delayedQuery = useRef(debounce((e) => setProduct(e), 500)).current;
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadDeliveries() {
@@ -54,7 +56,7 @@ export default function Deliveries() {
 
       setDeliveryItems(data);
       setTotalpages(response.data.total_page);
-      // setLoading(false);
+      setLoading(false);
     }
     loadDeliveries();
   }, [page, totalpages, product]);
@@ -71,24 +73,27 @@ export default function Deliveries() {
           />
         </div>
         <aside>
-          <Button type="back" />
           <Button type="add" url="deliveries/insert" />
         </aside>
       </HeaderContent>
 
-      <Grid
-        titles={[
-          'ID',
-          'Destinatário',
-          'Entregador',
-          'Cidade',
-          'Estado',
-          'Status',
-          'Ações',
-        ]}
-        itemsArray={deliveryItems}
-        template="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr"
-      />
+      {loading ? (
+        <Loading color="#7d40e7" height="20%" width="20%" />
+      ) : (
+        <Grid
+          titles={[
+            'ID',
+            'Destinatário',
+            'Entregador',
+            'Cidade',
+            'Estado',
+            'Status',
+            'Ações',
+          ]}
+          itemsArray={deliveryItems}
+          template="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr"
+        />
+      )}
 
       <Pagination
         page={page}

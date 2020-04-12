@@ -21,7 +21,7 @@ export default function Deliverymen() {
 
   useEffect(() => {
     async function loadDeliverimen() {
-      const response = await api.get(`deliveryman`, {
+      const response = await api.get(`deliverymen`, {
         params: { page, q: name },
       });
 

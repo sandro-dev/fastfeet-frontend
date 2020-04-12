@@ -19,6 +19,7 @@ export const Icon = styled.div`
   align-items: center;
   height: 20vh;
   width: 220px;
+  max-width: 1100px;
   margin: 100px auto;
 
   svg {

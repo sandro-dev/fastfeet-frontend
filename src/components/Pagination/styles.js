@@ -6,6 +6,7 @@ export const Container = styled.div`
   justify-content: center;
   margin: 10px 0;
   width: fit-content;
+  max-width: 1100px;
 
   button {
     background: #fff;

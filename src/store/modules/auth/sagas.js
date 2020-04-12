@@ -19,7 +19,7 @@ export function* signIn({ payload }) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
     yield put(signInSuccess(token, user));
-    history.push('/dashboard');
+    history.push('/deliveries');
   } catch (error) {
     console.tron.log('error SAGA', error);
     toast.error('Falha na autenticação, verifique seus dados!');

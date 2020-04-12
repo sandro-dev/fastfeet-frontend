@@ -11,7 +11,7 @@ import history from '~/services/history';
 
 import { Container, Button, List, ItemList, ButtonItem } from './styles';
 
-export default function MoreMenu({ id, items }) {
+export default function MoreMenu({ id, items, width }) {
   const [visible, setVisible] = useState(false);
 
   function handleToggleVisible() {
@@ -40,7 +40,7 @@ export default function MoreMenu({ id, items }) {
       </Button>
 
       <Container onMouseLeave={debounce(() => handleToggleVisible(), 1000)}>
-        <List visible={visible}>
+        <List visible={visible} width={width}>
           {items.map((item) => {
             return (
               <ItemList
@@ -55,7 +55,7 @@ export default function MoreMenu({ id, items }) {
                     }}
                   >
                     <MdEdit size={20} color="#4d85ee" />
-                    Editar
+                    <span>Editar</span>
                   </ButtonItem>
                 ) : null}
 
@@ -66,7 +66,7 @@ export default function MoreMenu({ id, items }) {
                     }}
                   >
                     <MdDeleteForever size={20} color="#de3b3b" />
-                    Excluir
+                    <span>{item.text ? item.text : 'Excluir'}</span>
                   </ButtonItem>
                 ) : null}
               </ItemList>
@@ -80,5 +80,10 @@ export default function MoreMenu({ id, items }) {
 
 MoreMenu.propTypes = {
   id: PropTypes.number.isRequired,
+  width: PropTypes.number,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+MoreMenu.defaultProps = {
+  width: 150,
 };

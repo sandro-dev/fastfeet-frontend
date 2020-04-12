@@ -18,8 +18,8 @@ export const ButtonItem = styled.button`
 
 export const List = styled.ul`
   position: absolute;
-  width: 150px;
-  left: calc(50% - 85px);
+  width: ${(props) => props.width}px;
+  left: -${(props) => Number(props.width + 20) / 2}px;
   top: calc(100% + 20px);
   background: #fff;
   border-radius: 4px;

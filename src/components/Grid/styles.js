@@ -49,4 +49,11 @@ export const Container = styled.div`
   section + section {
     margin-top: 20px;
   }
+
+  .line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 `;

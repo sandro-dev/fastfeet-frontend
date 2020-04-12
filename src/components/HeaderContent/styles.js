@@ -8,6 +8,5 @@ export const Container = styled.section`
 
   aside {
     display: flex;
-    margin-right: 10%;
   }
 `;

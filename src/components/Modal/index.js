@@ -10,7 +10,7 @@ export default function Modal({ content }) {
       trigger={
         <button type="button">
           <MdRemoveRedEye size={20} color="#8e5be8" />
-          Visualizar
+          <span>Visualizar</span>
         </button>
       }
       modal

@@ -63,7 +63,7 @@ export default function Deliveries() {
 
   return (
     <>
-      <HeaderContent>
+      <HeaderContent marginTop={55}>
         <div>
           <h1>Gerenciando encomendas</h1>
           <SearchInput

@@ -55,7 +55,7 @@ export default function Deliverymen() {
 
   return (
     <>
-      <HeaderContent>
+      <HeaderContent marginTop={55}>
         <div>
           <h1>Gerenciando entregadores</h1>
           <SearchInput

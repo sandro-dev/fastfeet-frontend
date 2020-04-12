@@ -45,7 +45,7 @@ export default function Recipients() {
 
   return (
     <>
-      <HeaderContent>
+      <HeaderContent marginTop={55}>
         <div>
           <h1>Gerenciando destinatários</h1>
           <SearchInput

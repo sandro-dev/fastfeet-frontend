@@ -26,23 +26,4 @@ export const Container = styled.div`
     font-size: 16px;
     color: #999;
   }
-
-  form .input-group {
-    display: grid;
-    grid-gap: 30px;
-
-    + div {
-      margin-top: 15px;
-    }
-  }
-
-  .col2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .col3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .col4 {
-    grid-template-columns: repeat(4, 1fr);
-  }
 `;

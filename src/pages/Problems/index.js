@@ -16,7 +16,7 @@ export default function Problems() {
 
   useEffect(() => {
     async function loadProblems() {
-      const response = await api.get(`deliveries/problems`, {
+      const response = await api.get(`delivery/problems`, {
         params: { page },
       });
 

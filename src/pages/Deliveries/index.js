@@ -49,7 +49,7 @@ export default function Deliveries() {
           items={[
             { type: 'view', content: <DeliveryModal data={delivery} /> },
             { type: 'edit', url: `/deliveries/edit` },
-            { type: 'delete', url: `/deliveries` },
+            { type: 'delete', url: `/deliveries/${delivery.id}` },
           ]}
         />,
       ]);

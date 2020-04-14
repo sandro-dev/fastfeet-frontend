@@ -32,7 +32,7 @@ export default function Recipients() {
           id={recipient.id}
           items={[
             { type: 'edit', url: `/recipients/edit` },
-            { type: 'delete', url: `/recipients` },
+            { type: 'delete', url: `/recipients/${recipient.id}` },
           ]}
         />,
       ]);

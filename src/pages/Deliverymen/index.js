@@ -42,7 +42,7 @@ export default function Deliverymen() {
           id={deliveryman.id}
           items={[
             { type: 'edit', url: `/deliverymen/edit` },
-            { type: 'delete', url: `/deliverymen` },
+            { type: 'delete', url: `/deliverymen/${deliveryman.id}` },
           ]}
         />,
       ]);
@@ -64,7 +64,7 @@ export default function Deliverymen() {
           />
         </div>
         <aside>
-          <Button type="add" url="deliveries/insert" />
+          <Button type="add" url="deliverymen/insert" />
         </aside>
       </HeaderContent>
 

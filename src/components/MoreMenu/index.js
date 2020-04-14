@@ -23,7 +23,7 @@ export default function MoreMenu({ id, items, width }) {
     const confirm = window.confirm(`Tem certeza que quer deletar este item?`);
 
     if (confirm) {
-      const response = await api.delete(`${url}/${itemId}`);
+      const response = await api.delete(`${url}`);
       if (response.data.ok === true) {
         toast.success(`item deletado com sucesso`);
         setTimeout(() => window.location.reload(false), 1000);

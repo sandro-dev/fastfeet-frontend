@@ -13,10 +13,11 @@ export default function InputGroup({ children, columns, template }) {
 
 InputGroup.propTypes = {
   children: PropTypes.node.isRequired,
-  columns: PropTypes.number.isRequired,
+  columns: PropTypes.number,
   template: PropTypes.string,
 };
 
 InputGroup.defaultProps = {
+  columns: 1,
   template: '',
 };

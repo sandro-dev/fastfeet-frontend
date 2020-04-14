@@ -32,9 +32,10 @@ export default function Deliverymen() {
             fullname={deliveryman.name}
             url={deliveryman.avatar.url}
             isPhoto
+            onlyIcon
           />
         ) : (
-          <Avatar fullname={deliveryman.name} />
+          <Avatar fullname={deliveryman.name} onlyIcon />
         ),
         deliveryman.name,
         deliveryman.email,

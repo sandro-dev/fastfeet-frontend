@@ -17,7 +17,7 @@ export default function Avatar({ fullname, isPhoto, url, onlyIcon }) {
           alt={`${fname} ${lname}`}
           title={`${fname} ${lname}`}
         />
-        {`${fname} ${lname}`}
+        {onlyIcon ? null : `${fname} ${lname}`}
       </>
     );
   }

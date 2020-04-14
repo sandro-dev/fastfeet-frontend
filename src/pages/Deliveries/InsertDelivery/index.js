@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
-
-import AsyncSelect from 'react-select/async';
-
+import React, { useRef } from 'react';
+import * as Yup from 'yup';
+import { Form } from '@unform/web';
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
 
 import HeaderContent from '~/components/HeaderContent';
 import Button from '~/components/Button';
-import Form from '~/components/Form';
-import { SimpleInput } from '~/components/Input';
+import ContentForm from '~/components/ContentForm';
+import { InputGroup, UnInput, InputAsyncSelect } from '~/components/Input';
 
 export default function InsertDelivery() {
-  const [recipientId, setRecipientId] = useState('');
-  const [deliverymanId, setDeliverymanId] = useState('');
-  const [product, setProduct] = useState('');
+  const formRef = useRef(null);
 
   async function loadDeliverymen(str) {
     const response = await api.get(`deliverymen`, { params: { q: str } });
@@ -33,21 +30,31 @@ export default function InsertDelivery() {
     return data;
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(data) {
     try {
-      const response = await api.post('deliveries', {
-        recipient_id: recipientId,
-        deliveryman_id: deliverymanId,
-        product,
+      const schema = Yup.object().shape({
+        deliveryman_id: Yup.string().required('Defina o entregador'),
+        recipient_id: Yup.string().required('Defina o destinatário'),
+        product: Yup.string().required('Preencha o campo do produto'),
       });
 
+      await schema.validate(data, { abortEarly: false });
+
+      const response = await api.post('deliveries', data);
       if (response.data.id) {
         toast.success('Encomenda cadastrada com sucesso');
         history.push('/deliveries');
       }
-    } catch (error) {
+    } catch (err) {
       toast.error('Erro ao inserir encomenda');
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        formRef.current.setErrors(validationErrors);
+        console.log(validationErrors);
+      }
     }
   }
 
@@ -69,46 +76,46 @@ export default function InsertDelivery() {
         </div>
         <aside>
           <Button type="back" url="/deliveries" />
-          <Button type="save" url="/deliveries" form="delivery-form" />
+          <Button type="save" form="delivery-form" />
         </aside>
       </HeaderContent>
 
-      <Form id="delivery-form" onSubmit={(e) => handleSubmit(e)}>
-        <div className="input-group col2">
-          <div className="input-block">
-            <label htmlFor="destinatario"> Destinatário </label>
-            <AsyncSelect
-              placeholder="Busque pelo nome do destinatário"
-              loadOptions={(str) => loadRecipients(str)}
-              onChange={(option) => setRecipientId(option ? option.value : '')}
-              styles={customAsync}
-            />
-          </div>
+      <ContentForm>
+        <Form ref={formRef} id="delivery-form" onSubmit={handleSubmit}>
+          <InputGroup columns={2}>
+            <div className="input-block">
+              <label htmlFor="destinatario">Destinatário </label>
+              <InputAsyncSelect
+                name="recipient_id"
+                loadOptions={loadRecipients}
+                placeholder="Busque pelo nome do destinatário"
+                styles={customAsync}
+              />
+            </div>
 
-          <div className="input-block">
-            <label htmlFor="destinatario"> Entregador </label>
-            <AsyncSelect
-              placeholder="Busque pelo nome do entregador"
-              loadOptions={(str) => loadDeliverymen(str)}
-              onChange={(option) =>
-                setDeliverymanId(option ? option.value : '')
-              }
-              styles={customAsync}
-            />
-          </div>
-        </div>
+            <div className="input-block">
+              <label htmlFor="destinatario">Entregador </label>
+              <InputAsyncSelect
+                name="deliveryman_id"
+                loadOptions={loadDeliverymen}
+                placeholder="Busque pelo nome do entregador"
+                styles={customAsync}
+              />
+            </div>
+          </InputGroup>
 
-        <div className="input-group">
-          <div className="input-block">
-            <label htmlFor="client">Nome do produto</label>
-            <SimpleInput
-              type="text"
-              placeholder="Nome do produto"
-              onChange={(e) => setProduct(e.target.value)}
-            />
-          </div>
-        </div>
-      </Form>
+          <InputGroup>
+            <div className="input-block">
+              <UnInput
+                type="text"
+                name="product"
+                label="Nome do Produto"
+                placeholder="Nome do produto"
+              />
+            </div>
+          </InputGroup>
+        </Form>
+      </ContentForm>
     </>
   );
 }

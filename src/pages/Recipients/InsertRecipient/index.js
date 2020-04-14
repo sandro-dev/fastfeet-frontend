@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { toast } from 'react-toastify';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -14,13 +15,35 @@ export default function InsertRecipient() {
 
   async function handleSubmit(data) {
     try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required('O nome é obrigatório'),
+        street: Yup.string().required('A rua é obrigatória'),
+        number: Yup.string().required('O número é obrigatório'),
+        complement: Yup.string().notRequired(),
+        city: Yup.string().required('A cidade é obrigatória'),
+        state: Yup.string().required('O estado é obrigatório'),
+        postcode: Yup.string().required('O CEP é obrigatório'),
+      });
+
+      await schema.validate(data, { abortEarly: false });
+
       const response = await api.post('recipients', data);
+
       if (response.data.recipient.id) {
         toast.success('Destinatário cadastrado com sucesso');
         history.push('/recipients');
       }
-    } catch (error) {
+    } catch (err) {
       toast.error('Erro ao inserir destinatário');
+
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        formRef.current.setErrors(validationErrors);
+        console.log(validationErrors);
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { Form } from '@unform/web';
 import api from '~/services/api';
@@ -16,8 +17,6 @@ export default function EditRecipient(recipient) {
   useEffect(() => {
     async function loadData() {
       const response = await api.get(`recipients/${id}`);
-      console.log('data -->', response.data);
-
       formRef.current.setData(response.data);
     }
     loadData();
@@ -25,13 +24,34 @@ export default function EditRecipient(recipient) {
 
   async function handleSubmit(data) {
     try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required('O nome é obrigatório'),
+        street: Yup.string().required('A rua é obrigatória'),
+        number: Yup.string().required('O número é obrigatório'),
+        complement: Yup.string().notRequired(),
+        city: Yup.string().required('A cidade é obrigatória'),
+        state: Yup.string().required('O estado é obrigatório'),
+        postcode: Yup.string().required('O CEP é obrigatório'),
+      });
+
+      await schema.validate(data, { abortEarly: false });
+
       const response = await api.put(`recipients/${id}`, data);
       if (response.data.recipient.id) {
         toast.success('Destinatário atualizado com sucesso');
         history.push('/recipients');
       }
-    } catch (error) {
+    } catch (err) {
       toast.error('Erro ao atualizar dados do destinatário');
+
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        formRef.current.setErrors(validationErrors);
+        console.log(validationErrors);
+      }
     }
   }
 

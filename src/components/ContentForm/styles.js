@@ -30,6 +30,10 @@ export const Container = styled.div`
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-    color: #999;
+    color: #444;
+
+    ::placeholder {
+      color: #999;
+    }
   }
 `;

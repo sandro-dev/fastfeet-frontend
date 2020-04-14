@@ -8,6 +8,12 @@ export const Container = styled.div`
   padding: 30px;
   font-family: 'Roboto';
 
+  span.error {
+    color: #de3b3b;
+    margin-left: 5px;
+    font-style: italic;
+  }
+
   form .input-block label {
     display: block;
     color: #444;

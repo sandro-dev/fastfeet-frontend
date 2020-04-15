@@ -11,32 +11,37 @@ import { UnInput, InputGroup, ImageInput } from '~/components/Input';
 
 export default function InsertDeliveryman(deliveryman) {
   const { id } = deliveryman.match.params;
-  const [preview, setPreview] = useState('');
   const formRef = useRef(null);
+  const [noAvatar, setNoAvatar] = useState(false);
+  const [fullname, setFullname] = useState('Deliveryman Fasteet');
 
   useEffect(() => {
     async function loadData() {
       const response = await api.get(`deliverymen/${id}`);
-      if (response) {
-        console.log('data -->', response.data);
-        // const avatar = response.data.avatar.url;
-        setPreview(response.data.avatar.url);
-        formRef.current.setData(response.data);
-        // formRef.current.setFieldValue('avatar_id', { id: 105, ...avatar });
+
+      if (!response.data.avatar_id) {
+        setNoAvatar(true);
+        setFullname(response.data.name);
       }
+
+      formRef.current.setData(response.data);
+      formRef.current.setFieldValue('avatar_id', {
+        id: response.data.avatar_id,
+        ...response.data.avatar,
+      });
     }
     loadData();
   }, [id]);
 
   async function handleSubmit(data) {
     try {
-      const response = await api.post('deliverymen', data);
-      if (response.data.id) {
-        toast.success('Entregador cadastrado com sucesso');
+      const response = await api.put(`deliverymen/${id}`, data);
+      if (response.data.ok) {
+        toast.success('Dados do entregador atualizado com sucesso');
         history.push('/deliverymen');
       }
     } catch (err) {
-      toast.error('Erro ao inserir entregador');
+      toast.error('Erro ao atualizar dados do entregador');
     }
   }
 
@@ -55,7 +60,11 @@ export default function InsertDeliveryman(deliveryman) {
       <ContentForm>
         <Form ref={formRef} id="deliverymen-form" onSubmit={handleSubmit}>
           <InputGroup>
-            <ImageInput name="avatar_id" imagePreview={preview} />
+            <ImageInput
+              name="avatar_id"
+              iconName={noAvatar}
+              fullname={fullname}
+            />
           </InputGroup>
           <InputGroup>
             <div className="input-block">

@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import AsyncSelect from 'react-select/async';
+import React, { useRef, useEffect } from 'react';
+import * as Yup from 'yup';
+import { Form } from '@unform/web';
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
 
 import HeaderContent from '~/components/HeaderContent';
 import Button from '~/components/Button';
-import Form from '~/components/Form';
-import { SimpleInput } from '~/components/Input';
+import ContentForm from '~/components/ContentForm';
+import { InputGroup, UnInput, InputAsyncSelect } from '~/components/Input';
 
-export default function EditDelivery(delivery) {
+export default function InsertDelivery(delivery) {
   const { id } = delivery.match.params;
-  const [recipientId, setRecipientId] = useState(null);
-  const [recipients, setRecipients] = useState([]);
-  const [deliverymanId, setDeliverymanId] = useState(null);
-  const [deliverymen, setDeliverymen] = useState([]);
-  const [product, setProduct] = useState('');
+  const formRef = useRef(null);
 
   async function loadDeliverymen(str) {
     const response = await api.get(`deliverymen`, { params: { q: str } });
@@ -23,7 +20,6 @@ export default function EditDelivery(delivery) {
       label: d.name,
       value: d.id,
     }));
-    setDeliverymen(data);
     return data;
   }
   async function loadRecipients(str) {
@@ -32,44 +28,56 @@ export default function EditDelivery(delivery) {
       label: r.name,
       value: r.id,
     }));
-    setRecipients(data);
     return data;
   }
 
   useEffect(() => {
+    loadRecipients();
+    loadDeliverymen();
+
     async function loadData() {
       const response = await api.get(`deliveries/${id}`);
-      setRecipientId(response.data.recipient_id);
-      setDeliverymanId(response.data.deliveryman_id);
-      setProduct(response.data.product);
-      console.log('product -->', response.data.product);
-    }
 
+      const { recipient, deliveryman } = response.data;
+      formRef.current.setData(response.data);
+
+      formRef.current.setFieldValue('recipient_id', {
+        value: recipient.id,
+        label: recipient.name,
+      });
+      formRef.current.setFieldValue('deliveryman_id', {
+        value: deliveryman.id,
+        label: deliveryman.name,
+      });
+    }
     loadData();
-    loadRecipients();
-    // setRecipients(loadRecipients());
-    loadDeliverymen();
-    // setDeliverymen(loadDeliverymen());
   }, [id]);
 
-  console.log('deliverymen --> ', deliverymen);
-  console.log('recipients --> ', recipients);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(data) {
     try {
-      const response = await api.put(`deliveries/${id}`, {
-        recipient_id: recipientId,
-        deliveryman_id: deliverymanId,
-        product,
+      const schema = Yup.object().shape({
+        deliveryman_id: Yup.number(),
+        recipient_id: Yup.number(),
+        product: Yup.string(),
       });
 
-      if (response.data.id) {
-        toast.success('Encomenda cadastrada com sucesso');
+      await schema.validate(data, { abortEarly: false });
+
+      const response = await api.put(`deliveries/${id}`, data);
+      if (response.data.ok) {
+        toast.success('Encomenda atualizada com sucesso');
         history.push('/deliveries');
       }
-    } catch (error) {
-      toast.error('Erro ao inserir encomenda');
+    } catch (err) {
+      toast.error('Erro ao atualizar a encomenda');
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        formRef.current.setErrors(validationErrors);
+        console.log(validationErrors);
+      }
     }
   }
 
@@ -87,58 +95,51 @@ export default function EditDelivery(delivery) {
     <>
       <HeaderContent>
         <div>
-          <h1>Edição de encomendas</h1>
+          <h1>Cadastro de encomendas</h1>
         </div>
         <aside>
           <Button type="back" url="/deliveries" />
-          <Button type="save" url="/deliveries" form="delivery-form" />
+          <Button type="save" form="delivery-form" />
         </aside>
       </HeaderContent>
 
-      <Form id="delivery-form" onSubmit={(e) => handleSubmit(e)}>
-        <div className="input-group col2">
-          <div className="input-block">
-            <label htmlFor="destinatario">Destinatário </label>
+      <ContentForm>
+        <Form ref={formRef} id="delivery-form" onSubmit={handleSubmit}>
+          <InputGroup columns={2}>
+            <div className="input-block">
+              <label htmlFor="destinatario">Destinatário </label>
 
-            <AsyncSelect
-              defaultOptions={(str) => loadRecipients(str)}
-              loadOptions={(str) => loadRecipients(str)}
-              value={recipients.filter((opt) => opt.value === recipientId)}
-              placeholder="Busque pelo nome do destinatário"
-              onChange={(option) => setRecipientId(option ? option.value : '')}
-              styles={customAsync}
-            />
-          </div>
+              <InputAsyncSelect
+                name="recipient_id"
+                loadOptions={loadRecipients}
+                placeholder="Busque pelo nome do destinatário"
+                styles={customAsync}
+              />
+            </div>
 
-          <div className="input-block">
-            <label htmlFor="destinatario">Entregador </label>
-            <AsyncSelect
-              defaultOptions={(str) => loadDeliverymen(str)}
-              loadOptions={(str) => loadDeliverymen(str)}
-              value={deliverymen.filter((opt) => opt.value === deliverymanId)}
-              placeholder="Busque pelo nome do entregador"
-              onChange={(option) =>
-                setDeliverymanId(option ? option.value : '')
-              }
-              styles={customAsync}
-            />
-          </div>
-        </div>
+            <div className="input-block">
+              <label htmlFor="destinatario">Entregador </label>
+              <InputAsyncSelect
+                name="deliveryman_id"
+                loadOptions={loadDeliverymen}
+                placeholder="Busque pelo nome do entregador"
+                styles={customAsync}
+              />
+            </div>
+          </InputGroup>
 
-        <div className="input-group">
-          <div className="input-block">
-            <label htmlFor="client">Nome do produto!!! </label>
-            <SimpleInput
-              type="text"
-              name="product"
-              id="product"
-              value={product}
-              placeholder="Nome do produto"
-              onChange={() => {}}
-            />
-          </div>
-        </div>
-      </Form>
+          <InputGroup>
+            <div className="input-block">
+              <UnInput
+                type="text"
+                name="product"
+                label="Nome do Produto"
+                placeholder="Nome do produto"
+              />
+            </div>
+          </InputGroup>
+        </Form>
+      </ContentForm>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { debounce } from 'lodash';
 // import ReactLoading from 'react-loading';
 import api from '~/services/api';
@@ -20,8 +20,12 @@ export default function Deliveries() {
   const [page, setPage] = useState(1);
   const [totalpages, setTotalpages] = useState();
   const [product, setProduct] = useState('');
-  const delayedQuery = useRef(debounce((e) => setProduct(e), 500)).current;
   const [loading, setLoading] = useState(true);
+
+  const delayedQuery = debounce((data) => {
+    setPage(1);
+    setProduct(data);
+  }, 500);
 
   useEffect(() => {
     async function loadDeliveries() {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { debounce } from 'lodash';
 import api from '~/services/api';
 
@@ -15,8 +15,12 @@ export default function Recipients() {
   const [page, setPage] = useState(1);
   const [totalpages, setTotalpages] = useState();
   const [name, setName] = useState('');
-  const delayedQuery = useRef(debounce((e) => setName(e), 500)).current;
   const [loading, setLoading] = useState(true);
+
+  const delayedQuery = debounce((data) => {
+    setPage(1);
+    setName(data);
+  }, 500);
 
   useEffect(() => {
     async function loadDeliverimen() {

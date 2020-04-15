@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 export const Image = styled.img`
-  max-width: 40px;
-  max-height: 40px;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
   background-color: #eee;
   border: 1px dashed #eee;
   border-radius: 50%;
-  margin-right: 10px;
+  margin: ${(props) => (props.margin ? props.margin : '0 10px 0 0')};
 `;
 
 export const Icon = styled.div`
@@ -14,12 +15,14 @@ export const Icon = styled.div`
   color: ${(props) => props.color};
   font-family: 'Roboto';
   text-transform: uppercase;
-  font-size: 16px;
-  width: 35px;
-  height: 35px;
+  font-size: ${(props) =>
+    props.styleIcon ? props.styleIcon.fontSize : '16'}px;
+  width: ${(props) => (props.styleIcon ? props.styleIcon.size : '35')}px;
+  height: ${(props) => (props.styleIcon ? props.styleIcon.size : '35')}px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  margin: ${(props) =>
+    props.styleIcon ? props.styleIcon.margin : '0 10px 0 0'};
 `;

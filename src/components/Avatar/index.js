@@ -4,7 +4,13 @@ import { sample } from 'lodash';
 
 import { Image, Icon } from './styles';
 
-export default function Avatar({ fullname, isPhoto, url, onlyIcon }) {
+export default function Avatar({
+  fullname,
+  isPhoto,
+  url,
+  onlyIcon,
+  styleIcon,
+}) {
   const name = fullname.split(' ');
   const fname = name.shift();
   const lname = name.pop();
@@ -16,6 +22,7 @@ export default function Avatar({ fullname, isPhoto, url, onlyIcon }) {
           src={url}
           alt={`${fname} ${lname}`}
           title={`${fname} ${lname}`}
+          styleIcon={styleIcon}
         />
         {onlyIcon ? null : `${fname} ${lname}`}
       </>
@@ -36,7 +43,7 @@ export default function Avatar({ fullname, isPhoto, url, onlyIcon }) {
 
   return (
     <>
-      <Icon bgcolor={select.bgcolor} color={select.color}>
+      <Icon bgcolor={select.bgcolor} color={select.color} styleIcon={styleIcon}>
         {initials}
       </Icon>
       {onlyIcon ? null : `${fname} ${lname}`}

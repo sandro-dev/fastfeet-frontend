@@ -5,8 +5,9 @@ import { MdImage } from 'react-icons/md';
 
 import api from '~/services/api';
 import { Container } from './styles';
+import AvatarName from '~/components/Avatar';
 
-export default function ImageInput({ name, ...rest }) {
+export default function ImageInput({ name, iconName, fullname, ...rest }) {
   const inputRef = useRef(null);
   const { fieldName, registerField, defaultValue } = useField(name);
   const [preview, setPreview] = useState(defaultValue);
@@ -40,8 +41,10 @@ export default function ImageInput({ name, ...rest }) {
         setPreview(null);
       },
       setValue(_, value) {
-        setAvatarId(value.id);
-        setPreview(value.url);
+        if (value) {
+          setAvatarId(value.id);
+          setPreview(value.url);
+        }
       },
     });
   }, [fieldName, registerField]);
@@ -57,8 +60,22 @@ export default function ImageInput({ name, ...rest }) {
           className="image-placeholder"
           title="Clique para adicionar uma foto"
         >
-          <MdImage color="#ddd" size={36} />
-          <span>Adicionar foto</span>
+          {iconName ? (
+            <AvatarName
+              fullname={fullname}
+              onlyIcon
+              styleIcon={{
+                margin: '0px',
+                fontSize: 66,
+                size: 148,
+              }}
+            />
+          ) : (
+            <>
+              <MdImage color="#ddd" size={36} />
+              <span>Adicionar foto</span>
+            </>
+          )}
         </div>
       )}
       <input
@@ -76,4 +93,10 @@ export default function ImageInput({ name, ...rest }) {
 
 ImageInput.propTypes = {
   name: PropTypes.string.isRequired,
+  fullname: PropTypes.string,
+  iconName: PropTypes.bool,
+};
+ImageInput.defaultProps = {
+  iconName: false,
+  fullname: '',
 };
